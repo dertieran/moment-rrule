@@ -1,6 +1,6 @@
 {
   "name": "moment-rrule",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A moment plugin to work with RFC 5545 recurrence rules",
   "main": "index.js",
   "repository": "git@github.com:DerTieran/moment-rrule.git",
