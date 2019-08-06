@@ -1,4 +1,4 @@
-# Moment RRule
+# Moment RRule [![Build Status](https://api.travis-ci.org/DerTieran/moment-rrule.svg?branch=master)](https://travis-ci.org/DerTieran/moment-rrule)
 
 > A moment plugin to work with RFC 5545 recurrence rules
 
