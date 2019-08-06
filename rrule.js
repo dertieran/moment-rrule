@@ -57,6 +57,7 @@ class RRule {
       if (this.until.isValid() === false) {
         throw new Error(`Invalid until, ${options.until} must be a valid date`);
       }
+
       if (this.until.isBefore(this.dtstart)) {
         throw new Error(`Invalid until, ${options.until} must be after dtstart`);
       }
@@ -91,6 +92,7 @@ class RRule {
     if (date.isAfter(last)) {
       return moment.invalid();
     }
+
     return date;
   }
 

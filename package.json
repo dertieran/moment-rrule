@@ -13,9 +13,9 @@
     "moment": "2.x"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "moment": "^2.21.0",
-    "xo": "^0.20.3"
+    "ava": "^2.2.0",
+    "moment": "^2.24.0",
+    "xo": "^0.24.0"
   },
   "xo": {
     "space": true
