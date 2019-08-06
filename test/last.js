@@ -51,3 +51,16 @@ test('last from not matching until', t => {
   t.true(last.isValid());
   t.is(next.toISOString(), last.toISOString());
 });
+
+test('every other week', t => {
+  const dtstart = moment();
+  const rrule = dtstart.rrule({
+    freq: 'weekly',
+    interval: 2,
+    until: dtstart.clone().add(5, 'weeks')
+  });
+
+  const next = rrule.last();
+  t.true(next.isValid());
+  t.is(next.toISOString(), dtstart.clone().add(4, 'weeks').toISOString());
+});

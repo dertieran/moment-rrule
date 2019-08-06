@@ -38,3 +38,16 @@ test('empty when after', t => {
   const dates = rrule.between(until.clone().add(1, 'minute'), until.clone().add(1, 'week'));
   t.is(dates.length, 0);
 });
+
+test('every other week', t => {
+  const dtstart = moment();
+  const rrule = dtstart.rrule({
+    freq: 'weekly',
+    interval: 2
+  });
+
+  const dates = rrule.between(dtstart.clone(), dtstart.clone().add(5, 'weeks'));
+  t.is(dates.length, 3);
+  t.is(dates[0].toISOString(), dtstart.toISOString());
+  t.is(dates[2].toISOString(), dtstart.clone().add(4, 'weeks').toISOString());
+});

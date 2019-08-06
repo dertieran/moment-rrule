@@ -26,3 +26,15 @@ test('until', t => {
   t.true(date.isValid());
   t.is(date.toISOString(), until.toISOString());
 });
+
+test('every other week', t => {
+  const dtstart = moment();
+  const rrule = dtstart.rrule({
+    freq: 'weekly',
+    interval: 2
+  });
+
+  const next = rrule.before(dtstart.clone().add(3, 'weeks'));
+  t.true(next.isValid());
+  t.is(next.toISOString(), dtstart.clone().add(2, 'weeks').toISOString());
+});

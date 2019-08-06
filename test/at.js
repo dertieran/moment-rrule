@@ -30,3 +30,15 @@ test('overflow number', t => {
   const invalid = rrule.at(count);
   t.false(invalid.isValid());
 });
+
+test('every other week', t => {
+  const dtstart = moment();
+  const rrule = dtstart.rrule({
+    freq: 'weekly',
+    interval: 2
+  });
+
+  const next = rrule.at(2);
+  t.true(next.isValid());
+  t.is(next.toISOString(), dtstart.clone().add(4, 'weeks').toISOString());
+});

@@ -2,7 +2,7 @@
 
 const moment = require('moment');
 
-// NOTE: These are basically lodash methods, maybe import them at some point.
+// These are basically lodash methods, maybe import them at some point.
 const isNil = v => v === undefined || v === null;
 const times = (n, fn) => new Array(n).fill().map((_, i) => fn(i));
 
@@ -42,6 +42,7 @@ class RRule {
       throw new Error(`Invalid frequency, ${options.freq}`);
     }
 
+    // Any invalid value will default to 1
     this.interval = Number.parseInt(opt.interval, 10) || 1;
     if (!this.interval || this.interval < 1) {
       throw new Error(`Invalid interval, ${options.interval} must be greater or equal 1`);
@@ -66,16 +67,18 @@ class RRule {
 
   last() {
     if (this.count) {
-      return this.dtstart.clone().add(this.count - 1, this.unit);
+      const amount = (this.count - 1) * this.interval;
+      return this.dtstart.clone().add(amount, this.unit);
     }
 
     if (this.until) {
-      const diff = this.until.diff(this.dtstart, this.unit);
+      const diff = Math.floor(this.until.diff(this.dtstart, this.unit, true) / this.interval);
       if (diff < 0) {
         return moment.invalid();
       }
 
-      return this.dtstart.clone().add(diff, this.unit);
+      const amount = diff * this.interval;
+      return this.dtstart.clone().add(amount, this.unit);
     }
 
     return moment.invalid();
@@ -88,7 +91,8 @@ class RRule {
     }
 
     const last = this.last();
-    const date = this.dtstart.clone().add(index, this.unit);
+    const amount = index * this.interval;
+    const date = this.dtstart.clone().add(amount, this.unit);
     if (date.isAfter(last)) {
       return moment.invalid();
     }
@@ -98,13 +102,14 @@ class RRule {
 
   after(date) {
     const m = moment(date);
-    const diff = Math.ceil(m.diff(this.dtstart, this.unit, true));
+    const diff = Math.ceil(m.diff(this.dtstart, this.unit, true) / this.interval);
     if (diff < 1) {
       return this.dtstart.clone();
     }
 
     const last = this.last();
-    const after = this.dtstart.clone().add(diff, this.unit);
+    const amount = diff * this.interval;
+    const after = this.dtstart.clone().add(amount, this.unit);
     if (after.isAfter(last)) {
       return moment.invalid();
     }
@@ -114,13 +119,14 @@ class RRule {
 
   before(date) {
     const m = moment(date);
-    const diff = Math.floor(m.diff(this.dtstart, this.unit, true));
+    const diff = Math.floor(m.diff(this.dtstart, this.unit, true) / this.interval);
     if (diff < 0) {
       return moment.invalid();
     }
 
     const last = this.last();
-    const before = this.dtstart.clone().add(diff, this.unit);
+    const amount = diff * this.interval;
+    const before = this.dtstart.clone().add(amount, this.unit);
     if (before.isAfter(last)) {
       return last;
     }
@@ -139,12 +145,12 @@ class RRule {
       return [];
     }
 
-    const diff = to.diff(from, this.unit);
+    const diff = Math.floor(to.diff(from, this.unit, true) / this.interval);
     if (diff < 0) {
       return [];
     }
 
-    return times(diff + 1, i => from.clone().add(i, this.unit));
+    return times(diff + 1, i => from.clone().add(i * this.interval, this.unit));
   }
 }
 

@@ -30,6 +30,17 @@ test('frequencies', t => {
   });
 });
 
+test('interval', t => {
+  const withInterval = interval => () => moment.rrule({
+    dtstart: moment(),
+    freq: 'weekly',
+    interval
+  });
+
+  t.throws(withInterval(-1));
+  t.notThrows(withInterval(2));
+});
+
 test('count', t => {
   const withCount = count => () => moment.rrule({
     dtstart: moment(),
